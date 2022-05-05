@@ -21,7 +21,8 @@ int main () {
         b(0, i) = sin(5*i);
     }
 
-    Matrix result = jacobi(A, b);
+    Matrix result_gs = gauss_seidel(A, b);
+    Matrix result_jacobi = jacobi(A, b);
 
-    std::cout << result << std::endl;
+    return 0;
 }
