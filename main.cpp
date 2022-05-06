@@ -23,6 +23,7 @@ int main () {
 
     Matrix result_gs = gauss_seidel(A, b);
     Matrix result_jacobi = jacobi(A, b);
+    Matrix result_lu = lu(A, b);
 
     return 0;
 }

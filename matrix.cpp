@@ -254,3 +254,61 @@ const Matrix gauss_seidel(const Matrix& A, const Matrix& b) {
 
     return x;
 }
+
+const Matrix lu(const Matrix& A, const Matrix& b) {
+    assert(A.getCols() == A.getRows());
+    assert(b.isVector());
+    assert(A.getCols() == b.getCols());
+
+    Matrix L(A.shape());
+    L.fillDiagonal(1.0);
+    Matrix U(A.shape());
+
+    Matrix x(b.shape());
+    
+    /* decompose */
+    for (size_t i = 0; i < A.getRows(); i++) {
+        /* upper */
+        for (size_t k = i; k < A.getCols(); k++) {
+            double s = 0.0;
+            for (size_t j = 0; j < i; j++) {
+                s += L(i, j) * U(j, k);
+            }
+            U(i, k) = A(i, k) - s;
+        }
+
+        /* lower */
+        for (size_t k = i + 1; k < A.getCols(); k++) {
+            double s = 0.0;
+            for (size_t j = 0; j < i; j++) {
+                s += L(k, j) * U(j, i);
+            }
+            L(k, i) = (A(k, i) - s) / U(i, i);
+        }
+    }
+    
+    /* solve L*y = b 
+     * forward
+     */
+    Matrix y(b.shape());
+    for (size_t i = 0; i < A.getRows(); i++) {
+        double s = 0.0;
+        for (size_t j = 0; j < i; j++) {
+            s += L(i, j) * y(0, j);
+        }
+        y(0, i) = (b(0, i) - s) / L(i, i);
+    }
+
+    /* solve U*x = y
+     * backward
+     */
+    for (size_t i = A.getRows(); i-- > 0;) {
+        double s = 0.0;
+        for (size_t j = i + 1; j < A.getCols(); j++) {
+            s += U(i, j) * x(0, j);
+        }
+        x(0, i) = (y(0, i) - s) / U(i, i);
+    }
+
+    return x;
+}
