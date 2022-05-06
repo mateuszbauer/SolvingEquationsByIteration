@@ -46,3 +46,4 @@ Matrix operator*(const Matrix&, const Matrix&);
 
 const Matrix jacobi(const Matrix&, const Matrix&);
 const Matrix gauss_seidel(const Matrix&, const Matrix&);
+const Matrix lu(const Matrix& A, const Matrix& b);
