@@ -45,3 +45,4 @@ Matrix operator-(const Matrix&, const Matrix&);
 Matrix operator*(const Matrix&, const Matrix&);
 
 const Matrix jacobi(const Matrix&, const Matrix&);
+const Matrix gauss_seidel(const Matrix&, const Matrix&);

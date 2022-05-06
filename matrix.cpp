@@ -204,7 +204,7 @@ void Matrix::ones() {
 
 const Matrix jacobi(const Matrix& A, const Matrix& b) {
     assert(A.getCols() == A.getRows());
-    assert(b.getRows() == 1);
+    assert(b.isVector());
     assert(A.getCols() == b.getCols());
 
     Matrix x(b.shape());
@@ -214,17 +214,42 @@ const Matrix jacobi(const Matrix& A, const Matrix& b) {
     do {
         for (size_t i = 0; i < A.getRows(); i++) {
             double k = 0;
-            for (size_t j = 0; j < A.getRows(); j++) {
+            for (size_t j = 0; j < A.getCols(); j++) {
                 if (i != j) {
                     k += A(i, j) * x(0, j);
                 }
             }
             x_new(0, i) = (b(0, i) - k) / A(i, i);
         }
-
         x = x_new;
         residuum = (A * x) - b;       
+    } while (residuum.norm() > 1e-9);
 
+    return x;
+}
+
+const Matrix gauss_seidel(const Matrix& A, const Matrix& b) {
+    assert(A.getCols() == A.getRows());
+    assert(b.isVector());
+    assert(A.getCols() == b.getCols());
+
+    Matrix x(b.shape());
+    Matrix x_new(b.shape());
+    Matrix residuum(b.shape());
+
+    do {
+        for (size_t i = 0; i < A.getRows(); i++) {
+            double k = 0;
+            for (size_t j = 0; j < i; j++) {
+                k += A(i, j) * x_new(0, j);
+            }
+            for (size_t j = i + 1; j < A.getCols(); j++) {
+                k += A(i, j) * x(0, j);
+            }
+            x_new(0, i) = (b(0, i) - k) / A(i, i);
+        }
+        x = x_new;
+        residuum = (A * x) - b;
     } while (residuum.norm() > 1e-9);
 
     return x;
