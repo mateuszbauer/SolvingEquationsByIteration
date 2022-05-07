@@ -26,3 +26,4 @@ Options:\
 Options can be combined
 
 <img src="https://github.com/mateuszbauer/SolvingEquationsByIteration/blob/master/images/2.jpg">
+<img src="https://github.com/mateuszbauer/SolvingEquationsByIteration/blob/master/images/3.jpg">
